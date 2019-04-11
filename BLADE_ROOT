@@ -1,22 +1,17 @@
 cc_config(
   append = config_items(
-    extra_incs = [
-        '/usr/lib/jvm/java-8-openjdk-amd64/include',
-        '/usr/lib/jvm/java-8-openjdk-amd64/include/linux',
-    ],
     cxxflags = [
-        '-std=c++11',
-        '-msse4.2',
-        '-pthread',
+      '-std=c++17',
+      '-msse4.2',
+      '-pthread',
     ],
     cflags = [
-        '-std=gnu99',
-        '-msse4.2',
-        '-pthread',
+      '-std=gnu99',
+      '-msse4.2',
+      '-pthread',
     ],
     linkflags = [
-        '-pthread',
-        '-L/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/server',
+      '-pthread',
     ]
   )
 )
