@@ -1,0 +1,3 @@
+[submodule "blade-build"]
+	path = blade-build
+	url = https://github.com/chen3feng/blade-build.git
