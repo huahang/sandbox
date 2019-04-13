@@ -24,3 +24,12 @@ cc_test_config(
     gtest_libs=['thirdparty/gtest:gtest'],
     gtest_main_libs=['thirdparty/gtest:gtest_main']
 )
+
+proto_library_config(
+    protoc='protoc',
+    protobuf_libs=['#protobuf'],
+    protobuf_path='',
+    protobuf_incs = '',
+    protobuf_php_path='',
+    protoc_php_plugin=''
+)
