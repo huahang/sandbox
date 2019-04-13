@@ -1,17 +1,26 @@
 cc_config(
-  append = config_items(
-    cxxflags = [
-      '-std=c++17',
-      '-msse4.2',
-      '-pthread',
-    ],
-    cflags = [
-      '-std=gnu99',
-      '-msse4.2',
-      '-pthread',
-    ],
-    linkflags = [
-      '-pthread',
-    ]
-  )
+    append = config_items(
+        cxxflags = [
+            '-std=c++17',
+            '-msse4.2',
+            '-pthread',
+        ],
+        cflags = [
+            '-std=gnu99',
+            '-msse4.2',
+            '-pthread',
+        ],
+        linkflags = [
+            '-pthread',
+        ]
+    )
+)
+
+cc_test_config(
+    dynamic_link=False,
+    heap_check='',
+    gperftools_libs=['#tcmalloc'],
+    gperftools_debug_libs=['#tcmalloc_debug'],
+    gtest_libs=['thirdparty/gtest:gtest'],
+    gtest_main_libs=['thirdparty/gtest:gtest_main']
 )

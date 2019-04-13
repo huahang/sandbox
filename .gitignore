@@ -1,7 +1,9 @@
+/.blade.test.stamp
+/.sconsign.dblite
+/.Building.lock
 /blade-bin
 /blade-build
-/.blade.test.stamp
 /build64_debug
 /build64_release
-/.Building.lock
-/.sconsign.dblite
+/SConstruct
+.vscode
