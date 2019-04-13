@@ -25,8 +25,8 @@ cc_library(
     incs = ['include', '.'],
     deps = [
         ":gtest",
-        "//thirdparty/glog:glog",
-        "//thirdparty/gflags:gflags"
+        "#glog",
+        "#gflags"
     ],
     warning = 'no',
     visibility = ['//thirdparty/gtest:gtest_main'],
