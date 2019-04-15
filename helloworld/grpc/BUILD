@@ -12,7 +12,7 @@ gen_rule(
         'hello.grpc.pb.cc',
         'hello.grpc.pb.h',
     ],
-    cmd = 'protoc --grpc_out=./blade-bin --plugin=protoc-gen-grpc=`which grpc_cpp_plugin` $FIRST_SRC'
+    cmd = 'protoc --grpc_out=./blade-bin --plugin=protoc-gen-grpc=/usr/local/opt/grpc/bin/grpc_cpp_plugin $FIRST_SRC'
 )
 
 cc_library(
@@ -24,9 +24,18 @@ cc_library(
     deps = [
         ':gen_hello_proto_grpc',
         ':hello_proto',
+        '#protobuf',
+        '#address_sorting',
+        '#gpr',
         '#grpc',
         '#grpc++',
-        '#protobuf',
+        '#grpc++_error_details',
+        '#grpcpp_channelz',
+        '#grpc++_reflection',
+        '#grpc_unsecure',
+        '#grpc++_unsecure',
+        '#z',
+        '#cares',
     ]
 )
 

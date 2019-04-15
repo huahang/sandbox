@@ -6,4 +6,5 @@
 /build64_debug
 /build64_release
 /SConstruct
+.idea
 .vscode

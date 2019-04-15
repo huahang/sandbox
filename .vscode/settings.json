@@ -1,0 +1,9 @@
+{
+  "editor.rulers": [
+    80
+  ],
+  "editor.renderWhitespace": "all",
+  "editor.tabSize": 2,
+  "C_Cpp.default.cppStandard": "c++17",
+  "C_Cpp.default.cStandard": "c99"
+}

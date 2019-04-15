@@ -1,65 +1,84 @@
-#include "helloworld/grpc/hello.pb.h"
 #include "helloworld/grpc/hello.grpc.pb.h"
 
-#include <grpc++/grpc++.h>
+#include <grpc/support/log.h>
+#include <grpcpp/grpcpp.h>
 
 #include <iostream>
 #include <memory>
 #include <string>
+#include <thread>
 
 using grpc::Channel;
+using grpc::ClientAsyncResponseReader;
 using grpc::ClientContext;
+using grpc::CompletionQueue;
 using grpc::Status;
 using helloworld::HelloRequest;
 using helloworld::HelloReply;
 using helloworld::Greeter;
 
 class GreeterClient {
- public:
-  GreeterClient(std::shared_ptr<Channel> channel)
-      : stub_(Greeter::NewStub(channel)) {}
+public:
+  explicit GreeterClient(std::shared_ptr<Channel> channel) 
+    : stub_(Greeter::NewStub(channel)) {}
 
-  // Assembles the client's payload, sends it and presents the response back
-  // from the server.
-  std::string SayHello(const std::string& user) {
-    // Data we are sending to the server.
+  void SayHello(const std::string& user) {
     HelloRequest request;
     request.set_name(user);
+    AsyncClientCall* call = new AsyncClientCall;
+    call->response_reader = stub_->PrepareAsyncSayHello(
+      &call->context,
+      request, &cq_
+    );
+    call->response_reader->StartCall();
+    call->response_reader->Finish(&call->reply, &call->status, (void*)call);
+  }
 
-    // Container for the data we expect from the server.
-    HelloReply reply;
-
-    // Context for the client. It could be used to convey extra information to
-    // the server and/or tweak certain RPC behaviors.
-    ClientContext context;
-
-    // The actual RPC.
-    Status status = stub_->SayHello(&context, request, &reply);
-
-    // Act upon its status.
-    if (status.ok()) {
-      return reply.message();
-    } else {
-      std::cout << status.error_code() << ": " << status.error_message()
-                << std::endl;
-      return "RPC failed";
+  void AsyncCompleteRpc() {
+    void* got_tag;
+    bool ok = false;
+    while (cq_.Next(&got_tag, &ok)) {
+      AsyncClientCall* call = static_cast<AsyncClientCall*>(got_tag);
+      GPR_ASSERT(ok);
+      if (call->status.ok()) {
+        std::cout 
+          << "Greeter received: " << call->reply.message() 
+          << std::endl;
+      } else {
+        std::cout 
+          << "RPC failed"
+          << std::endl;
+      }
+      delete call;
     }
   }
 
- private:
+private:
+  struct AsyncClientCall {
+    HelloReply reply;
+    ClientContext context;
+    Status status;
+    std::unique_ptr<ClientAsyncResponseReader<HelloReply>> response_reader;
+  };
+
   std::unique_ptr<Greeter::Stub> stub_;
+
+  CompletionQueue cq_;
 };
 
 int main(int argc, char** argv) {
-  // Instantiate the client. It requires a channel, out of which the actual RPCs
-  // are created. This channel models a connection to an endpoint (in this case,
-  // localhost at port 50051). We indicate that the channel isn't authenticated
-  // (use of InsecureChannelCredentials()).
-  GreeterClient greeter(grpc::CreateChannel(
-      "localhost:50051", grpc::InsecureChannelCredentials()));
-  std::string user("world");
-  std::string reply = greeter.SayHello(user);
-  std::cout << "Greeter received: " << reply << std::endl;
-
+  GreeterClient greeter(
+    grpc::CreateChannel(
+      "localhost:50051",
+      grpc::InsecureChannelCredentials()
+    )
+  );
+  std::thread thread = std::thread(&GreeterClient::AsyncCompleteRpc, &greeter);
+  for (int i = 0; i < 100; i++) {
+    std::string user("world " + std::to_string(i));
+    greeter.SayHello(user);
+  }
+  std::cout << "Press control-c to quit" << std::endl << std::endl;
+  thread.join();
   return 0;
 }
