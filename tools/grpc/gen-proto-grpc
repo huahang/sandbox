@@ -1,0 +1,5 @@
+#!/bin/sh
+
+protoc -I. --cpp_out=./blade-bin --grpc_out=./blade-bin \
+--plugin=protoc-gen-grpc=./thirdparty/grpc-1.19.1/bin/grpc_cpp_plugin \
+$1

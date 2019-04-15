@@ -1,3 +1,6 @@
-[submodule "blade-build"]
-	path = blade-build
+[submodule "tools/blade-build"]
+	path = tools/blade-build
 	url = https://github.com/chen3feng/blade-build.git
+[submodule "tools/header-extractor"]
+	path = tools/header-extractor
+	url = git@github.com:huahang/header-extractor.git

@@ -1,8 +1,5 @@
 cc_config(
     append = config_items(
-        extra_incs = [
-            '/usr/local/opt/grpc/include',
-        ],
         cxxflags = [
             '-std=c++17',
             '-msse4.2',
@@ -14,7 +11,6 @@ cc_config(
             '-pthread',
         ],
         linkflags = [
-            '-L/usr/local/opt/grpc/lib',
             '-pthread',
         ]
     )
