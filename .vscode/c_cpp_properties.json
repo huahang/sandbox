@@ -4,8 +4,7 @@
       "name": "Linux",
       "includePath": [
         "${workspaceRoot}",
-        "${workspaceRoot}/blade-bin",
-        "/usr/local/opt/grpc/include"
+        "${workspaceRoot}/blade-bin"
       ],
       "defines": [],
       "compilerPath": "/usr/bin/clang",
@@ -13,8 +12,7 @@
       "browse": {
         "path": [
           "${workspaceRoot}",
-          "${workspaceRoot}/blade-bin",
-          "/usr/local/opt/grpc/include"
+          "${workspaceRoot}/blade-bin"
         ],
         "limitSymbolsToIncludedHeaders": true,
         "databaseFilename": ""
