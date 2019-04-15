@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+export CCACHE_DIR=$BLADE_ROOT/.builder_ccache
+export PATH=$PATH:$BLADE_ROOT/tools/blade-build
+source $BLADE_ROOT/tools/blade-build/bladefunctions
