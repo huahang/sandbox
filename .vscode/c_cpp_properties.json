@@ -4,7 +4,8 @@
       "name": "Linux",
       "includePath": [
         "${workspaceRoot}",
-        "${workspaceRoot}/blade-bin"
+        "${workspaceRoot}/blade-bin",
+        "${workspaceRoot}/thirdparty"
       ],
       "defines": [],
       "compilerPath": "/usr/bin/clang",
@@ -12,7 +13,8 @@
       "browse": {
         "path": [
           "${workspaceRoot}",
-          "${workspaceRoot}/blade-bin"
+          "${workspaceRoot}/blade-bin",
+          "${workspaceRoot}/thirdparty"
         ],
         "limitSymbolsToIncludedHeaders": true,
         "databaseFilename": ""

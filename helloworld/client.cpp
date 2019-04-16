@@ -1,7 +1,6 @@
-#include "helloworld/proto/hello.grpc.pb.h"
-#include "helloworld/proto/hello.pb.h"
+#include <helloworld/proto/hello.grpc.pb.h>
+#include <helloworld/proto/hello.pb.h>
 
-#include <grpc/support/log.h>
 #include <grpcpp/grpcpp.h>
 
 #include <iostream>
@@ -9,32 +8,23 @@
 #include <string>
 #include <thread>
 
-using grpc::Channel;
-using grpc::ClientAsyncResponseReader;
-using grpc::ClientContext;
-using grpc::CompletionQueue;
-using grpc::Status;
-using helloworld::proto::HelloRequest;
-using helloworld::proto::HelloReply;
-using helloworld::proto::Greeter;
-
 namespace {
 
 class GreeterClient {
 public:
-  explicit GreeterClient(std::shared_ptr<Channel> channel) 
-    : greeterStub(Greeter::NewStub(channel)) {}
+  explicit GreeterClient(std::shared_ptr<grpc::Channel> channel) 
+    : greeterStub(helloworld::proto::Greeter::NewStub(channel)) {}
 
   void SayHello(const std::string& user) {
-    HelloRequest request;
+    helloworld::proto::HelloRequest request;
     request.set_name(user);
     AsyncClientCall* call = new AsyncClientCall;
-    call->response_reader = greeterStub->PrepareAsyncSayHello(
+    call->responseReader = greeterStub->PrepareAsyncSayHello(
       &call->context,
       request, &completionQueue
     );
-    call->response_reader->StartCall();
-    call->response_reader->Finish(&call->reply, &call->status, (void*)call);
+    call->responseReader->StartCall();
+    call->responseReader->Finish(&call->reply, &call->status, (void*)call);
   }
 
   void AsyncCompleteRpc() {
@@ -58,15 +48,17 @@ public:
 
 private:
   struct AsyncClientCall {
-    HelloReply reply;
-    ClientContext context;
-    Status status;
-    std::unique_ptr<ClientAsyncResponseReader<HelloReply>> response_reader;
+    helloworld::proto::HelloReply reply;
+    grpc::ClientContext context;
+    grpc::Status status;
+    std::unique_ptr<
+      grpc::ClientAsyncResponseReader<helloworld::proto::HelloReply>
+    > responseReader;
   };
 
-  std::unique_ptr<Greeter::Stub> greeterStub;
+  std::unique_ptr<helloworld::proto::Greeter::Stub> greeterStub;
 
-  CompletionQueue completionQueue;
+  grpc::CompletionQueue completionQueue;
 };
 
 } // anonymous namespace
